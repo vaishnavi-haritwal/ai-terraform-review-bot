@@ -1,10 +1,14 @@
+import os
 import subprocess
 from rules import check_open_cidrs, check_instance_size
 from ai_analyzer import analyze_with_ai
 from github_client import post_pr_comment
 
+base_ref = os.getenv("GITHUB_BASE_REF")
+head_ref = os.getenv("GITHUB_HEAD_REF")
+
 terraform_diff = subprocess.check_output(
-    ["git", "diff", "origin/main"]
+    ["git", "diff", f"origin/{base_ref}...origin/{head_ref}"]
 ).decode("utf-8")
 
 issues = []
