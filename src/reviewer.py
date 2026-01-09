@@ -1,8 +1,9 @@
 import os
 import subprocess
-from rules import check_open_cidrs, check_instance_size
-from ai_analyzer import analyze_with_ai
-from github_client import post_pr_comment
+from src.ai_analyzer import analyze_with_ai
+from src.rules import check_open_cidrs, check_instance_size
+from src.github_client import post_pr_comment
+
 
 base_ref = os.getenv("GITHUB_BASE_REF")
 head_ref = os.getenv("GITHUB_HEAD_REF")
