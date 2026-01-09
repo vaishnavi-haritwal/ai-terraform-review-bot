@@ -5,21 +5,22 @@ from ai_analyzer import analyze_with_ai
 from github_client import post_pr_comment
 
 def get_terraform_diff():
-    base_sha = os.getenv("GITHUB_BASE_SHA")
-    head_sha = os.getenv("GITHUB_SHA")
-
     try:
-        if base_sha and head_sha:
-            # PR context (best case)
-            return subprocess.check_output(
-                ["git", "diff", base_sha, head_sha]
+        # List changed Terraform files
+        changed_files = subprocess.check_output(
+            ["git", "diff", "--name-only", "HEAD"]
+        ).decode("utf-8").splitlines()
+
+        tf_files = [f for f in changed_files if f.endswith(".tf")]
+
+        diff_content = ""
+        for tf in tf_files:
+            diff_content += subprocess.check_output(
+                ["git", "diff", "HEAD", "--", tf]
             ).decode("utf-8")
-        else:
-            # Fallback: last commit
-            return subprocess.check_output(
-                ["git", "diff", "HEAD~1", "HEAD"]
-            ).decode("utf-8")
-    except subprocess.CalledProcessError:
+
+        return diff_content
+    except Exception:
         return ""
 
 terraform_diff = get_terraform_diff()
@@ -33,7 +34,7 @@ ai_feedback = analyze_with_ai(terraform_diff)
 comment = "## 🤖 AI Terraform Review Report\n\n"
 
 if not terraform_diff.strip():
-    comment += "ℹ️ No Terraform changes detected.\n"
+    comment += "ℹ️ No Terraform changes detected.\n\n"
 elif issues:
     comment += "### 🚦 Policy Violations\n"
     comment += "\n".join(issues) + "\n\n"
