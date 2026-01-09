@@ -1,0 +1,12 @@
+required_tags:
+  - owner
+  - environment
+  - cost_center
+
+disallowed_cidrs:
+  - "0.0.0.0/0"
+
+max_instance_types:
+  allowed:
+    - t3.micro
+    - t3.small
