@@ -4,6 +4,7 @@ from src.ai_analyzer import analyze_with_ai
 from src.rules import check_open_cidrs, check_instance_size
 from src.github_client import post_pr_comment
 
+
 def get_terraform_diff():
     try:
         # List changed Terraform files
