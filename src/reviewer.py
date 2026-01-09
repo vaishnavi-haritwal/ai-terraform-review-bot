@@ -4,6 +4,7 @@ from rules import check_open_cidrs, check_instance_size
 from ai_analyzer import analyze_with_ai
 from github_client import post_pr_comment
 
+
 base_sha = os.getenv("GITHUB_BASE_SHA")
 head_sha = os.getenv("GITHUB_SHA")
 
